@@ -11,22 +11,20 @@ public class MainController {
 
     private final InputView inputView;
     private final PathController pathController;
-    private Initializer initializer;
 
     public MainController(Scanner scanner) {
         this.inputView = new InputView(scanner);
         this.pathController = new PathController(scanner);
     }
 
-    public void run() {
+    public void run(Initializer initializer) {
         try {
-            // TODO : initializing 구현
             initializer.init();
             MainMenu selectedMenu = MainMenu.getMenuByName(inputView.readMainMenu());
             runMenu(selectedMenu);
         } catch (IllegalArgumentException exception) {
             OutputView.printExceptionMessage(exception);
-            run();
+            run(initializer);
         }
     }
 
