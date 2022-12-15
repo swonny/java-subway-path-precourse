@@ -1,7 +1,9 @@
 package controller;
 
 import constant.PathMenu;
+import repository.SectionRepository;
 import repository.SubwayRepository;
+import subway.domain.Section;
 import subway.domain.Station;
 import view.InputView;
 import view.OutputView;
@@ -36,10 +38,22 @@ public class PathController {
         String destination = inputView.readDestination();
         List<Station> shortestPath = getShortestPath(startStation, destination, selectedMenu);
         // TODO : distance, time 하드코딩 변경
+        printResult(shortestPath);
+    }
+
+    private void printResult(List<Station> shortestPath) {
         int distance = 0;
         int time = 0;
+        for (int stationIndex = 0; stationIndex < shortestPath.size() - 1; stationIndex++) {
+            Section section = SectionRepository.getSectionContains(
+                    shortestPath.get(stationIndex), shortestPath.get(stationIndex + 1)
+            );
+            distance += section.getDistance();
+            time += section.getTime();
+        }
         outputView.printResult(shortestPath, distance, time);
     }
+
 
     private List<Station> getShortestPath(String startStation, String destination, PathMenu selectedMenu) {
         if (PathMenu.FIRST.equals(selectedMenu)) {
@@ -50,14 +64,13 @@ public class PathController {
     }
 
     private List<Station> getPathByDistance(String startStation, String destination) {
-        // TODO : 반환값 변경
-        SubwayRepository.getShortestPathByDistance(startStation, destination);
-        return null;
+        // TODO : 연결 안돼있는 경우 예외처리하기
+        return SubwayRepository.getShortestPathByDistance(startStation, destination);
     }
 
     private List<Station> getPathByTime(String startStation, String destination) {
-        // TODO : 반환값 변경
-        return null;
+        // TODO : 연결 안돼있는 경우 예외처리하기
+        return SubwayRepository.getShortestPathByTime(startStation, destination);
     }
 
 }

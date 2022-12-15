@@ -3,6 +3,7 @@ package subway.domain;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 public class Section {
     private final int distance;
@@ -27,4 +28,13 @@ public class Section {
     public int getDistance() {
         return distance;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Section section = (Section) o;
+        return distance == section.distance && time == section.time && Objects.equals(stations, section.stations);
+    }
+
 }

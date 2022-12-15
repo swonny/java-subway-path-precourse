@@ -68,6 +68,7 @@ public class OutputView {
         printInfo("총 소요 시간: " + time + "분");
         printInfo(RESULT_DELIMITER);
         shortestPath.stream().forEach(station -> printInfo(station.getName()));
+        printNewLine();
     }
 
     private void printInfo(String value) {

@@ -1,6 +1,7 @@
 package repository;
 
 import subway.domain.Section;
+import subway.domain.Station;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -15,5 +16,11 @@ public class SectionRepository {
 
     public static List<Section> sections() {
         return Collections.unmodifiableList(sections);
+    }
+
+    public static Section getSectionContains(Station station1, Station station2) {
+        return sections.stream().filter(section -> section.stations().containsAll(List.of(station1, station2)))
+                .findAny()
+                .orElseThrow(() -> new IllegalArgumentException("해당 구간은 존재하지 않습니다."));
     }
 }

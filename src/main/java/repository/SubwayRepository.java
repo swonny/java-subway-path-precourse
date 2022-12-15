@@ -32,7 +32,6 @@ public class SubwayRepository {
         graphWithDistance.setEdgeWeight(graphWithDistance.addEdge(stations.get(0).getName(), stations.get(1).getName()), section.getDistance());
     }
 
-
     public static Set<String> graphByTime() {
         return graphWithTime.vertexSet();
     }
