@@ -1,0 +1,73 @@
+package repository;
+
+import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
+import subway.domain.Section;
+import org.jgrapht.graph.DefaultWeightedEdge;
+import org.jgrapht.graph.WeightedMultigraph;
+import subway.domain.Station;
+
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+public class SubwayRepository {
+    private static WeightedMultigraph<String, DefaultWeightedEdge> graphWithTime = new WeightedMultigraph(DefaultWeightedEdge.class);
+    private static WeightedMultigraph<String, DefaultWeightedEdge> graphWithDistance = new WeightedMultigraph(DefaultWeightedEdge.class);
+
+    public static void initializeTimeSection(Section section) {
+        List<Station> stations = section.stations();
+        stations.stream().forEach(station -> graphWithTime.addVertex(station.getName())); // Vertex 등록
+        graphWithTime.setEdgeWeight(graphWithTime.addEdge(stations.get(0).getName(), stations.get(1).getName()), section.getTime());
+    }
+
+    public static void initializeSection(Section section) {
+        initializeTimeSection(section);
+        initializeDistanceSection(section);
+    }
+
+    private static void initializeDistanceSection(Section section) {
+        List<Station> stations = section.stations();
+        stations.stream().forEach(station -> graphWithDistance.addVertex(station.getName())); // Vertex 등록
+        graphWithDistance.setEdgeWeight(graphWithDistance.addEdge(stations.get(0).getName(), stations.get(1).getName()), section.getDistance());
+    }
+
+    public static Set<String> graphByTime() {
+        return graphWithTime.vertexSet();
+    }
+
+    public static Set<String> graphByDistance() {
+        return graphWithDistance.vertexSet();
+    }
+
+    public static List<Station> getShortestPathByDistance(String startStation, String destination) {
+        validateVertexes(startStation, destination);
+        DijkstraShortestPath dijkstraShortestPath = new DijkstraShortestPath(graphWithDistance);
+        List<String> shortestPathName;
+        try {
+            shortestPathName = dijkstraShortestPath.getPath(startStation, destination).getVertexList();
+        } catch (NullPointerException exception) {
+            throw new IllegalArgumentException("연결되어 있지 않은 경로입니다.");
+        }
+        return shortestPathName.stream().map(stationName -> StationRepository.getStationByName(stationName))
+                .collect(Collectors.toList());
+    }
+
+    private static void validateVertexes(String startStation, String destination) {
+        if (!graphWithDistance.containsVertex(startStation) || !graphWithDistance.containsVertex(destination)) {
+            throw new IllegalArgumentException("존재하지 않는 역입니다.");
+        }
+    }
+
+    public static List<Station> getShortestPathByTime(String startStation, String destination) {
+        validateVertexes(startStation, destination);
+        DijkstraShortestPath dijkstraShortestPath = new DijkstraShortestPath(graphWithTime);
+        List<String> shortestPathName;
+        try {
+            shortestPathName = dijkstraShortestPath.getPath(startStation, destination).getVertexList();
+        } catch (NullPointerException exception) {
+            throw new IllegalArgumentException("연결되어 있지 않은 경로입니다.");
+        }
+        return shortestPathName.stream().map(stationName -> StationRepository.getStationByName(stationName))
+                .collect(Collectors.toList());
+    }
+}
