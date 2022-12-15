@@ -42,7 +42,12 @@ public class SubwayRepository {
     public static List<Station> getShortestPathByDistance(String startStation, String destination) {
         validateVertexes(startStation, destination);
         DijkstraShortestPath dijkstraShortestPath = new DijkstraShortestPath(graphWithDistance);
-        List<String> shortestPathName = dijkstraShortestPath.getPath(startStation, destination).getVertexList();
+        List<String> shortestPathName;
+        try {
+            shortestPathName = dijkstraShortestPath.getPath(startStation, destination).getVertexList();
+        } catch (NullPointerException exception) {
+            throw new IllegalArgumentException("연결되어 있지 않은 경로입니다.");
+        }
         return shortestPathName.stream().map(stationName -> StationRepository.getStationByName(stationName))
                 .collect(Collectors.toList());
     }
@@ -56,7 +61,12 @@ public class SubwayRepository {
     public static List<Station> getShortestPathByTime(String startStation, String destination) {
         validateVertexes(startStation, destination);
         DijkstraShortestPath dijkstraShortestPath = new DijkstraShortestPath(graphWithTime);
-        List<String> shortestPathName = dijkstraShortestPath.getPath(startStation, destination).getVertexList();
+        List<String> shortestPathName;
+        try {
+            shortestPathName = dijkstraShortestPath.getPath(startStation, destination).getVertexList();
+        } catch (NullPointerException exception) {
+            throw new IllegalArgumentException("연결되어 있지 않은 경로입니다.");
+        }
         return shortestPathName.stream().map(stationName -> StationRepository.getStationByName(stationName))
                 .collect(Collectors.toList());
     }
