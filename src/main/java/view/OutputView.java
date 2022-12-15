@@ -17,18 +17,6 @@ public class OutputView {
         System.out.println();
     }
 
-    private static String integerToString(int numericValue) {
-        return Integer.toString(numericValue);
-    }
-
-    private static void print(String value) {
-        System.out.print(value);
-    }
-
-    private static void printFormat(String value, String formatValue) {
-        System.out.printf(value, formatValue);
-    }
-
     public static void printExceptionMessage(Exception exception) {
         println("[ERROR] " + exception.getMessage());
     }
@@ -63,7 +51,6 @@ public class OutputView {
         printNewLine();
         println(PATH_RESULT);
         printInfo(RESULT_DELIMITER);
-        // TODO : 상수화하기
         printInfo("총 거리: " + distance + "km");
         printInfo("총 소요 시간: " + time + "분");
         printInfo(RESULT_DELIMITER);
