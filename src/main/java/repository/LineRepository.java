@@ -1,4 +1,6 @@
-package subway.domain;
+package repository;
+
+import subway.domain.Line;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -22,5 +24,21 @@ public class LineRepository {
 
     public static void deleteAll() {
         lines.clear();
+    }
+
+    public static Line getLineByName(String readLineName) {
+        return lines.stream()
+                .filter(line -> line.getName().equals(readLineName))
+                .findAny()
+                .orElseThrow(() -> new IllegalArgumentException("등록된 노선이 없습니다."));
+    }
+
+    public static boolean has(Line newLine) {
+        return lines.stream()
+                .anyMatch(line -> line.equals(newLine));
+    }
+
+    public static boolean isEmpty() {
+        return lines.isEmpty();
     }
 }

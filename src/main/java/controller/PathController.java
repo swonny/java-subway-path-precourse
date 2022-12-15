@@ -49,12 +49,12 @@ public class PathController {
         outputView.printResult(shortestPath, distance, time);
     }
 
-    private List<Station> getPathByTime(String startStation, String destination) {
+    private List<Station> getPathByDistance(String startStation, String destination) {
         // TODO : 반환값 변경
         return null;
     }
 
-    private List<Station> getPathByDistance(String startStation, String destination) {
+    private List<Station> getPathByTime(String startStation, String destination) {
         // TODO : 반환값 변경
         return null;
     }

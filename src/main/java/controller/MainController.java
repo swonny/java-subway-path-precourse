@@ -1,6 +1,7 @@
 package controller;
 
 import constant.MainMenu;
+import subway.domain.Initializer;
 import view.InputView;
 import view.OutputView;
 
@@ -10,6 +11,7 @@ public class MainController {
 
     private final InputView inputView;
     private final PathController pathController;
+    private Initializer initializer;
 
     public MainController(Scanner scanner) {
         this.inputView = new InputView(scanner);
@@ -18,6 +20,8 @@ public class MainController {
 
     public void run() {
         try {
+            // TODO : initializing 구현
+            initializer.init();
             MainMenu selectedMenu = MainMenu.getMenuByName(inputView.readMainMenu());
             runMenu(selectedMenu);
         } catch (IllegalArgumentException exception) {
