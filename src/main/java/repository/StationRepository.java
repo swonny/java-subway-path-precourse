@@ -37,4 +37,8 @@ public class StationRepository {
         return stations.stream()
                 .anyMatch(station -> station.equals(addingStation));
     }
+
+    public static boolean isSameStation(String startStation, String destination) {
+        return getStationByName(startStation).equals(getStationByName(destination));
+    }
 }

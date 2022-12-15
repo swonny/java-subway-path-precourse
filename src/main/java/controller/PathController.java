@@ -2,6 +2,7 @@ package controller;
 
 import constant.PathMenu;
 import repository.SectionRepository;
+import repository.StationRepository;
 import repository.SubwayRepository;
 import subway.domain.Section;
 import subway.domain.Station;
@@ -37,7 +38,6 @@ public class PathController {
         String startStation = inputView.readStartStation();
         String destination = inputView.readDestination();
         List<Station> shortestPath = getShortestPath(startStation, destination, selectedMenu);
-        // TODO : distance, time 하드코딩 변경
         printResult(shortestPath);
     }
 
@@ -56,6 +56,7 @@ public class PathController {
 
 
     private List<Station> getShortestPath(String startStation, String destination, PathMenu selectedMenu) {
+        validateDuplication(startStation, destination);
         if (PathMenu.FIRST.equals(selectedMenu)) {
             return getPathByDistance(startStation, destination);
         }
@@ -64,12 +65,16 @@ public class PathController {
     }
 
     private List<Station> getPathByDistance(String startStation, String destination) {
-        // TODO : 연결 안돼있는 경우 예외처리하기
         return SubwayRepository.getShortestPathByDistance(startStation, destination);
     }
 
+    private static void validateDuplication(String startStation, String destination) {
+        if (StationRepository.isSameStation(startStation, destination)) {
+            throw new IllegalArgumentException("출발역과 도착역이 동일합니다.");
+        }
+    }
+
     private List<Station> getPathByTime(String startStation, String destination) {
-        // TODO : 연결 안돼있는 경우 예외처리하기
         return SubwayRepository.getShortestPathByTime(startStation, destination);
     }
 

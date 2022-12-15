@@ -11,7 +11,6 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public class SubwayRepository {
-    // TODO : Enum으로 해도 될듯 & 변수명 대신 EnumMap으로 저장
     private static WeightedMultigraph<String, DefaultWeightedEdge> graphWithTime = new WeightedMultigraph(DefaultWeightedEdge.class);
     private static WeightedMultigraph<String, DefaultWeightedEdge> graphWithDistance = new WeightedMultigraph(DefaultWeightedEdge.class);
 
@@ -41,13 +40,21 @@ public class SubwayRepository {
     }
 
     public static List<Station> getShortestPathByDistance(String startStation, String destination) {
+        validateVertexes(startStation, destination);
         DijkstraShortestPath dijkstraShortestPath = new DijkstraShortestPath(graphWithDistance);
         List<String> shortestPathName = dijkstraShortestPath.getPath(startStation, destination).getVertexList();
         return shortestPathName.stream().map(stationName -> StationRepository.getStationByName(stationName))
                 .collect(Collectors.toList());
     }
 
+    private static void validateVertexes(String startStation, String destination) {
+        if (!graphWithDistance.containsVertex(startStation) || !graphWithDistance.containsVertex(destination)) {
+            throw new IllegalArgumentException("존재하지 않는 역입니다.");
+        }
+    }
+
     public static List<Station> getShortestPathByTime(String startStation, String destination) {
+        validateVertexes(startStation, destination);
         DijkstraShortestPath dijkstraShortestPath = new DijkstraShortestPath(graphWithTime);
         List<String> shortestPathName = dijkstraShortestPath.getPath(startStation, destination).getVertexList();
         return shortestPathName.stream().map(stationName -> StationRepository.getStationByName(stationName))

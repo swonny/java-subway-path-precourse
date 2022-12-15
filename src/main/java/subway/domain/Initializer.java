@@ -54,7 +54,6 @@ public class Initializer {
 
     private void initializeSubwayRepository(List<Section> sections) {
         for (Section section : sections) {
-            // TODO : station 이름 두 개, 가중치 두 개 넘겨주는건?
             SubwayRepository.initializeSection(section);
         }
     }

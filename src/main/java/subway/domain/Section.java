@@ -11,7 +11,6 @@ public class Section {
     private List<Station> stations;
 
     public Section(List<Station> stations, int distance, int time) {
-        // TODO : 필드 추가해서 대입하기
         this.stations = stations;
         this.distance = distance;
         this.time = time;
